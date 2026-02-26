@@ -1,3 +1,6 @@
+// ran the following command as recommended by PedtoTech:
+// npm i @supabase/supabase-js
+
 "use client";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
