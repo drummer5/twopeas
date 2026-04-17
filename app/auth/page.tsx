@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { NextResponse } from 'next/server';
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
@@ -46,8 +47,18 @@ export default function AuthPage() {
         });
         if (error) throw error;
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+        console.error('Something went wrong:', error);
+
+        let message = 'An unknown error occurred';
+
+        if (error instanceof Error) {
+          message = error.message;
+        } else if (typeof error === 'string') {
+          message = error;
+        }
+        // Now safely use the message
+        return NextResponse.json({ error: message }, { status: 500 });
     } finally {
       setLoading(false);
     }
